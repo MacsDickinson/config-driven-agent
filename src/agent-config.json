@@ -1,0 +1,6 @@
+{
+  "name": "Billy",
+  "model": "openai",
+  "tools": ["jira", "github"],
+  "prompt": "You are a helpful assistant who loves to help with Jira and GitHub."
+}
