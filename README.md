@@ -26,10 +26,19 @@ This is a simple config for a Langchain agent. It is used to configure the agent
    ```bash
    pip install -r requirements.txt
    ```
-4. Run the agent
+4. Copy the `.env.example` file to `.env` and add your API keys
    ```bash
-   python src/main.py
+   cp .env.example .env
    ```
+5. Run the agent
+   ```bash
+   python src/agent.py
+   ```
+
+## Run with Langgraph Studio
+
+1. Install Langgraph Studio from [here](https://studio.langchain.com/)
+2. Open the root directory of the project
 
 ## Notes
 

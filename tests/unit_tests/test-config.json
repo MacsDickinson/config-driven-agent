@@ -1,0 +1,6 @@
+{
+  "name": "test assistant",
+  "model": "openai",
+  "tools": ["jira", "github"],
+  "prompt": "You are a test."
+}

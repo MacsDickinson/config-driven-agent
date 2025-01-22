@@ -50,7 +50,7 @@ def load_tools(config_tools):
 
     return sanitise_tools_functions(tools)
 
-def load_config(config_path="agent-config.json"):
+def load_config(config_path="./characters/agent-config.json"):
     """
     Load and parse the agent configuration file.
     
@@ -70,47 +70,40 @@ def load_config(config_path="agent-config.json"):
         config.get("tools", [])
     )
 
-def load_llm(config_model):
+def load_llm(model):
     """
     Load the LLM based on the configuration settings.
     """
     # select the model based on what is set in the config
-    if config_model == "openai":
+    if model == "openai":
         from langchain_openai import ChatOpenAI
         llm = ChatOpenAI(model="gpt-4o")
-    elif config_model == "anthropic":
+    elif model == "anthropic":
         from langchain_anthropic import ChatAnthropic
         llm = ChatAnthropic(model="claude-3-5-sonnet-20240620")
     else:
-        raise ValueError(f"Model {config_model} not supported")
+        raise ValueError(f"Model {model} not supported")
 
-    return llm.bind_tools(tools)
+    return llm
 
-
-def load_graph(config_name, tools, llm):
+def load_graph(name, prompt, tools, llm):
     """
     Load the graph based on the configuration settings.
     """
-    sys_msg = SystemMessage(content=config_prompt)
+    llm_with_tools = llm.bind_tools(tools)
+    sys_msg = SystemMessage(content=prompt)
 
     def assistant(state: MessagesState):
-        return {"messages": [llm.invoke([sys_msg] + state["messages"])]}
+        return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
 
     builder = StateGraph(MessagesState)
-    builder.add_node(config_name, assistant)
+    builder.add_node(name, assistant)
     builder.add_node("tools", ToolNode(tools))
-    builder.add_edge(START, config_name)
+    builder.add_edge(START, name)
     builder.add_conditional_edges(
-        config_name,
+        name,
         tools_condition,
     )
-    builder.add_edge("tools", config_name)
+    builder.add_edge("tools", name)
 
     return builder.compile()
-
-# Load configuration
-config_model, config_name, config_prompt, config_tools = load_config()
-
-tools = load_tools(config_tools)
-llm = load_llm(config_model)
-graph = load_graph(config_name, tools, llm)
