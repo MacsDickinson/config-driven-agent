@@ -8,10 +8,6 @@ from langchain_core.messages import HumanMessage, AIMessage
 # Load environment variables from .env file
 load_dotenv()
 
-# Log environment variables (for debugging)
-print("SLACK_BOT_TOKEN:", os.getenv("SLACK_BOT_TOKEN"))
-print("SLACK_SIGNING_SECRET:", os.getenv("SLACK_SIGNING_SECRET"))
-
 # Initialize the Slack app
 app = App(
     token=os.getenv("SLACK_BOT_TOKEN"),
