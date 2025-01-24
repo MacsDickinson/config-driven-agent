@@ -1,4 +1,3 @@
-# Load config
 import json
 from langchain_core.messages import SystemMessage
 
@@ -50,7 +49,7 @@ def load_tools(config_tools):
 
     return sanitise_tools_functions(tools)
 
-def load_config(config_path="./characters/agent-config.json"):
+def load_config(config_path):
     """
     Load and parse the agent configuration file.
     
@@ -60,9 +59,12 @@ def load_config(config_path="./characters/agent-config.json"):
     Returns:
         tuple: (model, name, prompt, tools) configuration values
     """
-    with open(config_path, "r") as f:
-        config = json.load(f)
-    
+    try:
+        with open(config_path, "r") as f:
+            config = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        config = {}
+        
     return (
         config.get("model", "openai"),
         config.get("name", "assistant"),
@@ -90,7 +92,7 @@ def load_graph(name, prompt, tools, llm):
     """
     Load the graph based on the configuration settings.
     """
-    llm_with_tools = llm.bind_tools(tools)
+    llm_with_tools = llm if not tools else llm.bind_tools(tools)
     sys_msg = SystemMessage(content=prompt)
 
     def assistant(state: MessagesState):
