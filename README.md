@@ -30,6 +30,41 @@ This is a simple config for a Langchain agent. It is used to configure the agent
    ```bash
    python src/agent.py
    ```
+6. Run the agent with a specific character
+   ```bash
+   python src/agent.py --character characters/agent-sunny.json
+   ```
+
+### Running the github tool
+
+In order to run the github tool you need to set the following environment variables:
+
+- `GITHUB_APP_ID`: The id of the github app - generate this by creating a new github app [here](https://github.com/settings/apps/new)
+- `GITHUB_APP_PRIVATE_KEY`: The path to the private key of the github app - generate this from your newly created github app
+- `GITHUB_REPOSITORY`: The name of the repository to use
+
+### Running the jira tool
+
+In order to run the jira tool you need to set the following environment variables:
+
+- `JIRA_API_TOKEN`: The api token of the jira account - generate this from your jira account
+- `JIRA_USERNAME`: The username of the jira account
+- `JIRA_INSTANCE_URL`: The url of the jira instance
+- `JIRA_CLOUD`: Whether the jira instance is cloud or not
+
+### Running the slackbot
+
+In order to run the slackbot you need to set the following environment variables:
+
+- `SLACK_BOT_TOKEN`: The token of the slack bot
+- `SLACK_APP_TOKEN`: The token of the slack app
+- `SLACK_SIGNING_SECRET`: The signing secret of the slack app
+
+Run the slackbot with the following command:
+
+```bash
+python src/slackbot.py
+```
 
 ## Run with Langgraph Studio
 
